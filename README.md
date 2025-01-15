@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# nifty-agent-starter
 
-## Getting Started
+This repo is an example implementation of an AI agent that is compatible with Nifty Island.
+It uses OpenRouter for LLM inference, and the agent API endpoint uses Next.js and can be hosted on Vercel.
 
-First, run the development server:
+Currently, the agent is a simple chatbot that only replies to the latest message without previous message history.
+
+To customize the agent, you can modify the prompt, model, and other LLM settings in the `app/api/chat/route.ts` file.
+
+## Running locally
+
+Set up a `.env.local` file with your OpenRouter API key:
+
+```bash
+OPENROUTER_API_KEY=your_api_key
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The website has a UI where you can chat with the agent for testing.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploying to Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Link your GitHub repo to your Vercel account. In your project settings in Vercel, set the `OPENROUTER_API_KEY` environment variable to your OpenRouter API key.
 
-## Learn More
+## Run for free (for testing)
 
-To learn more about Next.js, take a look at the following resources:
+Google Gemini API has a free tier (currently 15 requests per minute, 1 million tokens per minute, 1,500 requests per day). If you decide to use a Gemini model (e.g. `google/gemini-flash-1.5-8b`), you can run the agent effectively for free for testing or low usage scenarios.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+To do this, get your Google AI Studio API key. Go to OpenRouter > Settings > Integrations, select Google AI Studio, and set your API key.

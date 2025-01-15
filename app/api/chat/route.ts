@@ -55,6 +55,7 @@ You will receive their messages and should respond naturally as if you're a char
         model: 'google/gemini-flash-1.5-8b',
         messages,
         max_tokens: 5000,
+        temperature: 1.0,
         stream: true
       })
     });
