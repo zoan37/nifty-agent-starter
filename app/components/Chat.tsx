@@ -7,11 +7,7 @@ interface Message {
   content: string;
 }
 
-interface ChatProps {
-  apiBaseUrl: string;
-}
-
-export default function Chat({ apiBaseUrl }: ChatProps) {
+export default function Chat() {
   const [input, setInput] = useState('');
   const [userName, setUserName] = useState('User');
   const [userId, setUserId] = useState('1');
