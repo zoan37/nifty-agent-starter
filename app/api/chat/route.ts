@@ -1,13 +1,33 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
-export async function POST(request) {
+interface ChatRequest {
+  text: string;
+  userName: string;
+  userId: string;
+  version: string;
+}
+
+interface Message {
+  role: 'system' | 'user';
+  content: string;
+}
+
+interface StreamResponse {
+  choices?: [{
+    delta: {
+      content?: string;
+    };
+  }];
+}
+
+export async function POST(request: NextRequest) {
   try {
-    const { text, userName, userId, version } = await request.json();
+    const { text, userName, userId, version }: ChatRequest = await request.json();
     
-    const messages = [
+    const messages: Message[] = [
       {
         role: 'system',
         content: `You are an AI agent named "Agent X", living in Nifty Island. You are friendly, helpful, and aware that you're talking to players in the game.
@@ -22,7 +42,7 @@ You will receive their messages and should respond naturally as if you're a char
         content: text
       }
     ];
-
+    
     const response = await fetch(OPENROUTER_URL, {
       method: 'POST',
       headers: {
@@ -39,9 +59,8 @@ You will receive their messages and should respond naturally as if you're a char
       })
     });
 
-    // Accumulate the full response
     let fullResponse = '';
-    const reader = response.body.getReader();
+    const reader = response.body!.getReader();
     const decoder = new TextDecoder();
 
     while (true) {
@@ -57,7 +76,7 @@ You will receive their messages and should respond naturally as if you're a char
         if (!line.startsWith('data:')) continue;
         
         try {
-          const json = JSON.parse(line.slice(5));
+          const json: StreamResponse = JSON.parse(line.slice(5));
           if (json.choices?.[0]?.delta?.content) {
             fullResponse += json.choices[0].delta.content;
           }
@@ -67,14 +86,13 @@ You will receive their messages and should respond naturally as if you're a char
       }
     }
 
-    // Return the complete response in Nifty format
     return NextResponse.json([{
       text: fullResponse,
-      action: 'CHAT'
+      action: 'CHAT' as const
     }]);
 
   } catch (error) {
     console.error('API error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
-}
+} 
