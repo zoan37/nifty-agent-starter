@@ -23,8 +23,7 @@ interface StreamResponse {
     }];
 }
 
-export const corsHeaders = {
-    // TODO: Eventually should look into if we can restrict the origin to only Nifty Island
+const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
