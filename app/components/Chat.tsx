@@ -7,15 +7,27 @@ interface Message {
   content: string;
 }
 
-export default function Chat() {
+interface ChatProps {
+  apiBaseUrl: string;
+}
+
+export default function Chat({ apiBaseUrl }: ChatProps) {
   const [input, setInput] = useState('');
   const [userName, setUserName] = useState('User');
   const [userId, setUserId] = useState('1');
   const [version, setVersion] = useState('1.0');
+  const [apiUrl, setApiUrl] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const defaultUrl = typeof window !== 'undefined' 
+      ? `${window.location.protocol}//${window.location.host}/api/chat`
+      : '/api/chat';
+    setApiUrl(defaultUrl);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -44,7 +56,7 @@ export default function Chat() {
     setInput('');
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,8 +86,21 @@ export default function Chat() {
   return (
     <div className="max-w-2xl mx-auto p-4">
       <div className="bg-white rounded-lg shadow-lg p-6">
-        {/* Add configuration inputs */}
-        <div className="grid grid-cols-3 gap-4 mb-4">
+        {/* Add API URL input to the configuration section */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="col-span-2">
+            <label htmlFor="apiUrl" className="block text-sm font-medium text-gray-700 mb-1">
+              API URL
+            </label>
+            <input
+              id="apiUrl"
+              type="text"
+              value={apiUrl}
+              onChange={(e) => setApiUrl(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-gray-900"
+            />
+          </div>
+          {/* Existing configuration inputs */}
           <div>
             <label htmlFor="userName" className="block text-sm font-medium text-gray-700 mb-1">
               Username
