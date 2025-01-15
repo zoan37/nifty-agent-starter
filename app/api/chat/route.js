@@ -7,10 +7,18 @@ export async function POST(request) {
   try {
     const { text, userName, userId, version } = await request.json();
     
-    const messages = [{
-      role: 'user',
-      content: text
-    }];
+    const messages = [
+      {
+        role: 'system',
+        content: `You are an AI agent named "Agent X", living in Nifty Island. You are friendly, helpful, and aware that you're talking to players in the game. 
+You are currently talking to ${userName} (ID: ${userId}).
+You will receive their messages and should respond naturally as if you're a character in the game, while being helpful and engaging.`
+      },
+      {
+        role: 'user',
+        content: text
+      }
+    ];
 
     const response = await fetch(OPENROUTER_URL, {
       method: 'POST',
