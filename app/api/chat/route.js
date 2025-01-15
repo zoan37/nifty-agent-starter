@@ -11,7 +11,7 @@ export async function POST(request) {
       {
         role: 'system',
         content: `You are an AI agent named "Agent X", living in Nifty Island. You are friendly, helpful, and aware that you're talking to players in the game. 
-You are currently talking to ${userName} (ID: ${userId}).
+You are currently talking to player "${userName}" (userId = "${userId}").
 You will receive their messages and should respond naturally as if you're a character in the game, while being helpful and engaging.`
       },
       {
